@@ -2,3 +2,8 @@
 .junie/
 node_modules/
 dist/
+dist-mirror/
+# 本机桌面快捷方式相关（不进公网仓库）
+icon.ico
+icon-256.png
+tools/make-desktop-shortcut.ps1
