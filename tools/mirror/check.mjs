@@ -70,13 +70,23 @@ try {
     const r = await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true });
     return r.result.value;
   };
-  const stats = await evalJs(`(() => ({
+  const isBook = await evalJs(`!!document.getElementById('tot')`);
+  const stats = isBook ? await evalJs(`(() => ({
     title: document.title,
     total: (document.getElementById('tot')||{}).textContent,
     shown: (document.getElementById('cnt')||{}).textContent,
     items: document.querySelectorAll('#list .entry, #list .item, #list article').length,
     listText: (document.getElementById('list')||{}).innerText ? document.getElementById('list').innerText.slice(0,60) : '',
     mirrorNote: !!document.querySelector('.mirror-note'),
+    adsNodes: document.querySelectorAll('img[src*="ads/"], #tip-mask, #tip-open').length,
+    statusLeft: !!document.querySelector('#status'),
+  }))()`) : await evalJs(`(() => ({
+    title: document.title,
+    total: '-',
+    shown: '-',
+    items: document.querySelectorAll('button, input[type=radio], .q, .ask').length,
+    listText: document.body.innerText.replace(/\\s+/g,' ').slice(0,60),
+    mirrorNote: true,
     adsNodes: document.querySelectorAll('img[src*="ads/"], #tip-mask, #tip-open').length,
     statusLeft: !!document.querySelector('#status'),
   }))()`);
